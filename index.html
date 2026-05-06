@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digits Trading Prediction</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>💹 Digits Trading Prediction</h1>
+            <p class="subtitle">Real-time predictions for Deriv Digits Trading</p>
+        </header>
+
+        <!-- Main Grid -->
+        <div class="main-grid">
+            <!-- Left Sidebar - Current Digit -->
+            <aside class="sidebar">
+                <div class="digit-display">
+                    <h2>Current Digit</h2>
+                    <div class="digit-box" id="currentDigit">5</div>
+                    <button class="btn-refresh" onclick="generateNewDigit()">Generate New Digit</button>
+                </div>
+
+                <div class="stats-box">
+                    <h3>📊 Session Stats</h3>
+                    <div class="stat-item">
+                        <span>Total Trades:</span>
+                        <span id="totalTrades" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Wins:</span>
+                        <span id="wins" class="stat-value wins">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Losses:</span>
+                        <span id="losses" class="stat-value losses">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Win Rate:</span>
+                        <span id="winRate" class="stat-value">0%</span>
+                    </div>
+                    <button class="btn-reset" onclick="resetStats()">Reset Stats</button>
+                </div>
+            </aside>
+
+            <!-- Center - Prediction Types -->
+            <main class="prediction-section">
+                <div class="prediction-grid">
+                    <!-- Matches Prediction -->
+                    <div class="prediction-card">
+                        <div class="card-header">
+                            <h3>🎯 Matches</h3>
+                            <span class="card-icon">M</span>
+                        </div>
+                        <div class="prediction-body">
+                            <div class="digit-input-group">
+                                <label>Predict Digit:</label>
+                                <input type="number" id="matchesInput" min="0" max="9" placeholder="0-9">
+                            </div>
+                            <div class="entry-point">
+                                <p><strong>Entry Point:</strong></p>
+                                <p id="matchesEntry" class="entry-text">Waiting for analysis...</p>
+                            </div>
+                            <button class="btn-predict matches-btn" onclick="predictMatches()">Predict Matches</button>
+                            <div class="result" id="matchesResult"></div>
+                        </div>
+                    </div>
+
+                    <!-- Differs Prediction -->
+                    <div class="prediction-card">
+                        <div class="card-header">
+                            <h3>🔄 Differs</h3>
+                            <span class="card-icon">D</span>
+                        </div>
+                        <div class="prediction-body">
+                            <div class="digit-input-group">
+                                <label>Predict Different Digit:</label>
+                                <input type="number" id="differsInput" min="0" max="9" placeholder="0-9">
+                            </div>
+                            <div class="entry-point">
+                                <p><strong>Entry Point:</strong></p>
+                                <p id="differsEntry" class="entry-text">Waiting for analysis...</p>
+                            </div>
+                            <button class="btn-predict differs-btn" onclick="predictDiffers()">Predict Differs</button>
+                            <div class="result" id="differsResult"></div>
+                        </div>
+                    </div>
+
+                    <!-- Even/Odd Prediction -->
+                    <div class="prediction-card">
+                        <div class="card-header">
+                            <h3>♦️ Even/Odd</h3>
+                            <span class="card-icon">E/O</span>
+                        </div>
+                        <div class="prediction-body">
+                            <div class="button-group">
+                                <button class="btn-choice even-btn" onclick="predictEvenOdd('even')">Even</button>
+                                <button class="btn-choice odd-btn" onclick="predictEvenOdd('odd')">Odd</button>
+                            </div>
+                            <div class="entry-point">
+                                <p><strong>Entry Point:</strong></p>
+                                <p id="evenOddEntry" class="entry-text">Waiting for analysis...</p>
+                            </div>
+                            <div class="result" id="evenOddResult"></div>
+                        </div>
+                    </div>
+
+                    <!-- Over/Under Prediction -->
+                    <div class="prediction-card">
+                        <div class="card-header">
+                            <h3>📈 Over/Under</h3>
+                            <span class="card-icon">O/U</span>
+                        </div>
+                        <div class="prediction-body">
+                            <div class="button-group">
+                                <button class="btn-choice over-btn" onclick="predictOverUnder('over')">Over 4</button>
+                                <button class="btn-choice under-btn" onclick="predictOverUnder('under')">Under 5</button>
+                            </div>
+                            <div class="entry-point">
+                                <p><strong>Entry Point:</strong></p>
+                                <p id="overUnderEntry" class="entry-text">Waiting for analysis...</p>
+                            </div>
+                            <div class="result" id="overUnderResult"></div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Right Sidebar - Trade Management -->
+            <aside class="trade-sidebar">
+                <div class="trade-management">
+                    <h3>📋 Trade Management</h3>
+                    
+                    <div class="trade-settings">
+                        <label>Trades Per Session:</label>
+                        <input type="number" id="tradesPerSession" min="1" max="100" value="5">
+                        <p class="info-text">Recommended: 5-10 trades</p>
+                    </div>
+
+                    <div class="trade-counter">
+                        <p>Trades Remaining:</p>
+                        <div class="counter-display">
+                            <span id="tradesRemaining" class="counter-number">5</span>
+                            <span class="counter-label">/ <span id="totalTradesSet">5</span></span>
+                        </div>
+                    </div>
+
+                    <div class="trade-info">
+                        <h4>🎲 Next Prediction</h4>
+                        <p id="nextPrediction" class="prediction-info">Generate a digit to start</p>
+                    </div>
+
+                    <button class="btn-start" onclick="startTradingSession()">Start Session</button>
+                </div>
+
+                <div class="recommendation-box">
+                    <h4>💡 AI Recommendation</h4>
+                    <p id="aiRecommendation" class="recommendation-text">Analyzing patterns...</p>
+                    <div class="confidence">
+                        <span>Confidence:</span>
+                        <span id="confidence" class="confidence-value">0%</span>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <!-- Trade History -->
+        <section class="history-section">
+            <h2>📜 Trade History</h2>
+            <div class="history-table">
+                <table id="historyTable">
+                    <thead>
+                        <tr>
+                            <th>Trade #</th>
+                            <th>Type</th>
+                            <th>Prediction</th>
+                            <th>Digit</th>
+                            <th>Result</th>
+                            <th>Entry Point</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyBody">
+                        <tr>
+                            <td colspan="6" class="empty-message">No trades yet. Start trading to see history.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>⚠️ Disclaimer: This is a prediction tool for educational purposes. Always trade responsibly.</p>
+            <p>© 2026 Digits Trading Prediction | Deriv Trading Assistant</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
